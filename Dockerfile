@@ -1,6 +1,25 @@
 # Use the orthuk/ardupilot-sitl image as the base
 FROM orthuk/ardupilot-sitl
 
+# Install missing dependencies (C compiler, build tools, Python, etc.)
+USER root
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    clang \
+    make \
+    git \
+    rsync \
+    python3 \
+    python3-pip \
+    python3-dev \
+    python3-setuptools \
+    python3-wheel \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set user back if required
+USER docker  # Remove if the container should run as root
+
 # Declare build arguments with default values
 ARG VEHICLE_TYPE=ArduCopter
 ARG FRAME=quad
@@ -28,8 +47,6 @@ ENV VEHICLE_TYPE=${VEHICLE_TYPE} \
 # Set the working directory
 WORKDIR /home/docker/ardupilot
 
-USER root
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
-
