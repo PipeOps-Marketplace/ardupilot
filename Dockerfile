@@ -1,5 +1,5 @@
 # Use the orthuk/ardupilot-sitl image as the base
-FROM orthuk/ardupilot-sitl-debian
+FROM orthuk/ardupilot-sitl-debian:0.2.0
 
 # Install missing dependencies (C compiler, build tools, Python, etc.)
 USER root
